@@ -56,7 +56,7 @@ Value   Intern(const char* name)
         Value sym = pBucket->sym;
         if (GetBinaryLength(sym) == len) {
             SymbolData* pSymData = (SymbolData*) GetData(sym);
-            if (pSymData->hash == hash && !_stricmp(pSymData->name, name))
+            if (pSymData->hash == hash && !strcasecmp(pSymData->name, name))
                 return sym;
         }
         pBucket = pBucket->next;

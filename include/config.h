@@ -34,7 +34,7 @@ extern void dbgPrintOneValue(Value v, int depth);
 #define TRACE dbgprintf
 #define TRACEVALUE dbgPrintOneValue
 #else
-inline void TRACE(char*, ...) { }
+inline void TRACE(const char*, ...) { }
 #define TRACEVALUE(Value, int) { }
 #endif
 
@@ -50,12 +50,21 @@ inline void TRACE(char*, ...) { }
   #define EXPORT extern
 #endif
 
+#include <stdlib.h>
+#include <memory.h>
+
 #ifdef WIN32
- #include <malloc.h>
+#include <malloc.h>
  #define ALLOCA _alloca
- #include <stdlib.h>
  #define SWAB _swab
  #include <tchar.h>
+#else
+  #include <unistd.h>
+  #include <string>
+  #include <wchar.h>
+  #define SWAB swab
+  typedef wchar_t TCHAR;
+  #define _T(str) L##str
 #endif
 
 #endif //__CONFIG_H__

@@ -9,7 +9,7 @@
 #include "predefined.h"
 #include <stdio.h>
 
-extern "C" void __stdcall DebugBreak(void);
+inline void DebugBreak(void) { __asm__("int $3"); }
 
 DECLARE_PSYM(array);
 DECLARE_PSYM(real);
@@ -197,7 +197,7 @@ int main()
         testintrp();
         //PrintBCCounts();
 
-        extern __declspec(dllexport) void TestParser();
+        EXPORT void TestParser();
         //TestParser();
     }
     catch (ProtaException& ex) {

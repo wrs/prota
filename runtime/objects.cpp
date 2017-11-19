@@ -1024,7 +1024,7 @@ bool    HasPath(Value obj, Value path)
     if (V_ISINT(path)) {
         UInt index = UNSAFE_V_INT(path);
         Object* pObj = V_PTR(obj);
-        if (ObjIsArray(pObj) && index >= 0 && index < pObj->size)
+        if (ObjIsArray(pObj) && index < pObj->size)
             return true;
         else
             return false;
@@ -1047,8 +1047,7 @@ bool    HasPath(Value obj, Value path)
 
                     if (V_ISINT(pathElt)) {
                         UInt index = UNSAFE_V_INT(pathElt);
-                        if (ObjIsArray(pCurObj) &&
-                                index >= 0 && index < pCurObj->size)
+                        if (ObjIsArray(pCurObj) && index < pCurObj->size)
                             curObj = pCurObj->pSlots[UNSAFE_V_INT(pathElt)];
                         else
                             return false;
@@ -1106,8 +1105,8 @@ Value   NewString(int size)
 
 Value   NewString(const TCHAR* str)
 {
-    Value result = NewBinary(PSYM(string), (_tcslen(str) + 1) * sizeof(TCHAR));
-    _tcscpy((TCHAR*) GetData(result), str);
+    Value result = NewBinary(PSYM(string), (wcslen(str) + 1) * sizeof(TCHAR));
+    wcscpy((TCHAR*) GetData(result), str);
     return result;
 }
 

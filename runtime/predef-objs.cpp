@@ -12,8 +12,6 @@
 #include "config.h"
 #include "predefined.h"
 
-#define PREDEF(type,name) extern "C" __declspec(dllexport) type PREDEF_NAME(name)
-
 typedef struct _VALUE* Value;
 
 struct Binary {

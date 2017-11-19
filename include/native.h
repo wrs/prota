@@ -45,11 +45,11 @@ typedef Value (*NativeFuncPtr)(Value, Value*, void*);
 #define ARG(name)   (_pArgs_->name)
 
 struct GlobalFuncDecl {
-    GlobalFuncDecl(char* theName, NativeFuncPtr theFunc, int theNumArgs)
+    GlobalFuncDecl(const char* theName, NativeFuncPtr theFunc, int theNumArgs)
         : name(theName), func(theFunc), numArgs(theNumArgs)
         { pNext = g_head; g_head = this; }
 
-    char*           name;
+    const char*     name;
     NativeFuncPtr   func;
     int             numArgs;
     GlobalFuncDecl* pNext;

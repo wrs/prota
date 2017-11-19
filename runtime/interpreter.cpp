@@ -1132,7 +1132,7 @@ EXPORT  void    InitInterpreter()
 
 // DEBUGGING
 
-static char* g_opNames[] = {
+static const char* g_opNames[] = {
     "unary0",
     "unary1",
     "unary2",
@@ -1166,7 +1166,8 @@ static char* g_opNames[] = {
     "unused30",
     "unused31"
 };
-static char* g_unary0Names[] = {
+
+static const char* g_unary0Names[] = {
     "pop",
     "dup",
     "return",
@@ -1176,7 +1177,8 @@ static char* g_unary0Names[] = {
     "iter-done",
     "pop-handlers"
 };
-static char* g_freqFuncNames[] = {
+
+static const char* g_freqFuncNames[] = {
     "+",
     "-",
     "ARef",
@@ -1203,6 +1205,7 @@ static char* g_freqFuncNames[] = {
     "HasPath",
     "ClassOf"
 };
+
 void    PrintInstruction(Byte* ip, Value* literals)
 {
 
