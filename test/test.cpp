@@ -1,6 +1,6 @@
 /*
-	Copyright 1997-1999 Walter R. Smith
-	Licensed under the MIT License. See LICENSE file in project root.
+    Copyright 1997-1999 Walter R. Smith
+    Licensed under the MIT License. See LICENSE file in project root.
 */
 
 #include "gc.h"
@@ -23,7 +23,7 @@ void TestFrames()
     f = NewFrame();
     SetSlot(f, SYM(a), INT_V(1));
     SetSlot(f, SYM(f), f);
-    
+
     a = NewArray(2);
     SetSlot(a, 0, NewString(_T("howdy")));
     SetSlot(a, 1, f);
@@ -32,7 +32,7 @@ void TestFrames()
     for (int i = 0; i < 70; i++) {
         char buf[32];
         sprintf(buf, "sym%d", i);
-        
+
         Value v;
         switch (i % 3) {
             case 0: v = INT_V(i); break;
@@ -56,15 +56,15 @@ void TestFrames()
     a = NewArray(PSYM(array), 0);
     AddArraySlot(a, INT_V(123));
     AddArraySlot(a, REAL_V(2.5));
-    
-    PrintValueLn(f);
-
-    RemoveSlot(f, SYM(y));
 
     PrintValueLn(f);
 
     RemoveSlot(f, SYM(y));
-    
+
+    PrintValueLn(f);
+
+    RemoveSlot(f, SYM(y));
+
     PrintValueLn(f);
 
     RemoveSlot(f, SYM(x));
@@ -72,32 +72,32 @@ void TestFrames()
     PrintValueLn(f);
 
     {
- 	    f = NewFrame();
-    	    SetSlot(f, SYM(int), INT_V(1));
-    	    if (!HasSlot(f, SYM(int)))
-		    DebugBreak();
-	    Value v = GetSlot(f, SYM(int));
-	    if (V_INT(v) != 1)
-		    DebugBreak();
-    	    SetSlot(f, SYM(char),CHAR_V('a'));
-    	    if (!HasSlot(f, SYM(char)))
-		    DebugBreak();
-	    v = GetSlot(f, SYM(char));
-	    if (V_CHAR(v) != 'a')
-		    DebugBreak();
-    	    PrintValueLn(f);
+        f = NewFrame();
+            SetSlot(f, SYM(int), INT_V(1));
+            if (!HasSlot(f, SYM(int)))
+            DebugBreak();
+        Value v = GetSlot(f, SYM(int));
+        if (V_INT(v) != 1)
+            DebugBreak();
+            SetSlot(f, SYM(char),CHAR_V('a'));
+            if (!HasSlot(f, SYM(char)))
+            DebugBreak();
+        v = GetSlot(f, SYM(char));
+        if (V_CHAR(v) != 'a')
+            DebugBreak();
+            PrintValueLn(f);
 
-	    // Remove the slots
-	    RemoveSlot(f, SYM(int));
-    	    if (HasSlot(f, SYM(int)))
-		    DebugBreak();
-    	    if (!HasSlot(f, SYM(char)))
-		    DebugBreak();
-	    RemoveSlot(f, SYM(char));
-    	    if (HasSlot(f, SYM(char)))
-		    DebugBreak();
+        // Remove the slots
+        RemoveSlot(f, SYM(int));
+            if (HasSlot(f, SYM(int)))
+            DebugBreak();
+            if (!HasSlot(f, SYM(char)))
+            DebugBreak();
+        RemoveSlot(f, SYM(char));
+            if (HasSlot(f, SYM(char)))
+            DebugBreak();
     }
-    
+
     f = NewFrame();
 
     Value sym385 = Intern("SYM385");
@@ -173,32 +173,32 @@ void TestFrames()
 
 void teststr()
 {
-	PrintValueLn(ReadStreamFile("boot.stm"));
+    PrintValueLn(ReadStreamFile("boot.stm"));
 }
 
 //__declspec(dllimport) void testiter(void);
 
 void testintrp()
 {
-	Value func = ReadStreamFile("play.stm");
-	PrintValueLn(func);
-	PrintValueLn(Call(func));
+    Value func = ReadStreamFile("play.stm");
+    PrintValueLn(func);
+    PrintValueLn(Call(func));
 }
 
 int main()
 {
-	extern void PrintBCCounts(void);
+    extern void PrintBCCounts(void);
 
     try {
-	    InitProtoLib();
+        InitProtoLib();
 
         //TestFrames();
-	    //testiter();
-	    testintrp();
-	    //PrintBCCounts();
+        //testiter();
+        testintrp();
+        //PrintBCCounts();
 
-	    extern __declspec(dllexport) void TestParser();
-	    //TestParser();
+        extern __declspec(dllexport) void TestParser();
+        //TestParser();
     }
     catch (ProtaException& ex) {
         printf("exception: %s - ", ex.name);
@@ -208,7 +208,7 @@ int main()
         printf("exception: %s\n", s);
     }
 
-	GC_gcollect();
+    GC_gcollect();
 
-	return 0;
+    return 0;
 }

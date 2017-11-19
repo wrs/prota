@@ -116,7 +116,7 @@ bool    IsSymbol(Value obj)
 
 bool    IsString(Value obj)
 {
-	Object* pObj = V_PTR(obj);
+    Object* pObj = V_PTR(obj);
     return (pObj->flags & HDR_SLOTTED) == 0 && pObj->cls == PSYM(string);
 }
 
@@ -298,13 +298,13 @@ void    AddArraySlot(Value array, Value newValue)
     AddSlotValue(pObj, newValue);
 }
 
-Value*	GetArraySlots(Value array)
+Value*  GetArraySlots(Value array)
 {
-	Object* pObj = V_PTR(array);
-	if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != HDR_SLOTTED)
-		PROTO_THROW(g_exType, E_NotAnArray);
+    Object* pObj = V_PTR(array);
+    if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != HDR_SLOTTED)
+        PROTO_THROW(g_exType, E_NotAnArray);
 
-	return pObj->pSlots;
+    return pObj->pSlots;
 }
 
 int     GetArrayLength(Value array)
@@ -449,14 +449,14 @@ void    RehashFrame(Object* pFrame, int newSize)
     // Get our bearings
 
     int oldSize = pFrame->size;
-    
+
     Value newMap = NewArray(HASH_MAP_CLASS, HashMapArraySize(newSize));
     MapSlots* newSlots = (MapSlots*) UNSAFE_V_PTR(newMap)->pSlots;
     Value* newData = (Value*) GC_MALLOC(newSize * sizeof(Value));
 
     MapSlots* oldSlots = (MapSlots*) UNSAFE_V_PTR(pFrame->map)->pSlots;
     Value* oldData = pFrame->pSlots;
-    
+
     int nOccupied;
     Value* oldTags;
 
@@ -480,7 +480,7 @@ void    RehashFrame(Object* pFrame, int newSize)
             int iFreeSlot;
             bool found = FindHashMapTag(newSize, newSlots, tag, &iSlot, &iFreeSlot);
             ASSERT(!found && newSlots->hash.table[iFreeSlot] == V_NIL || newSlots->hash.table[iFreeSlot] == INT_V(0));
-            
+
             newSlots->hash.table[iFreeSlot] = tag;
             newData[iFreeSlot] = oldData[i];
         }
@@ -558,7 +558,7 @@ EXPORT  Value   NewFrameWithMap(Value map)
 // If tag is in map, returns a positive number which is the offset of
 // tag in map plus the length of the supermaps -- that is, the offset
 // in the data of the slot corresponding to the tag.
-// 
+//
 // If not, returns a negative number -(S+1) where S is the size of
 // the map plus supermaps.
 //
@@ -624,7 +624,7 @@ Value   GetSlot(Value frame, Value tag)
 }
 
 // Internal function that does the real work of RemoveSlot.
-// 
+//
 // Life would be so much simpler if you couldn't remove slots from frames.
 // This is built on the same recursive search algorithm as FindOffset. If
 // the tag is found, we remove it from the map and data segment where we
@@ -657,7 +657,7 @@ int     RemoveSlotInner(Value map, Value tag, Object* pObj)
 
             int nOccupied = UNSAFE_V_INT(pMapSlots->hash.nOccupied);
             pMapSlots->hash.nOccupied = INT_V(nOccupied - 1);
-            
+
             // Shrink the hash table if enough data has been removed,
             // but don't let it get smaller than HASH_MAP_MIN.
 
@@ -710,7 +710,7 @@ void    ConvertToHashMap(Object* pFrame)
     int tableSize = 1;
     while (tableSize < pFrame->size)
         tableSize *= 2;
-    
+
     if (pFrame->size > (tableSize/2 + tableSize/4))
         tableSize *= 2;
 
@@ -753,7 +753,7 @@ int     AddSlot(Object* pFrame, Value tag)
     MapSlots* pMapSlots = (MapSlots*) pMap->pSlots;
 
     int flags = UNSAFE_V_INT(pMap->cls);
-    
+
     if (flags & SHARED_MAP) {
         Value newMap = Clone(pFrame->map);
         pFrame->map = newMap;
@@ -778,10 +778,10 @@ int     AddSlot(Object* pFrame, Value tag)
         int freeSlot;
         bool exists = FindHashMapTag(tableSize, pMapSlots, tag, &slot, &freeSlot);
         ASSERT(!exists);
-        
+
         pMapSlots->hash.table[freeSlot] = tag;
         pMapSlots->hash.nOccupied = INT_V(UNSAFE_V_INT(pMapSlots->hash.nOccupied) + 1);
-        
+
         return freeSlot;
     }
     else {
@@ -809,7 +809,7 @@ void    SetSlot(Value frame, Value tag, Value newValue)
 
     if (index < 0)
         index = AddSlot(pObj, tag);
-    
+
     pObj->pSlots[index] = newValue;
 
 #ifdef _DEBUG
@@ -864,7 +864,7 @@ Value   Clone(Value obj)
 
     pNew->size = size;
     pNew->flags = pObj->flags;
-    
+
     if (ObjIsFrame(pObj)) {
         // Mark the map as shared
         Value& rCls = UNSAFE_V_PTR(pObj->map)->cls;
@@ -902,12 +902,12 @@ Value   DeepCloneInner(Value obj, ObjHashTable<Value>& hash)
         return obj;
 
     Value newObj;
-    
+
     if (hash.Get(obj, &newObj))
         return newObj;
 
     newObj = Clone(obj);
-    
+
     hash.Set(obj, newObj);
 
     Object* pNewObj = UNSAFE_V_PTR(newObj);
@@ -952,15 +952,15 @@ Value   GetPath(Value obj, Value path)
     }
     else {
         Object* pPath = V_PTR(path);
-        
+
         if (ObjIsSymbol(pPath)) {
             return GetSlot(obj, path);
         }
         else if (ObjIsArray(pPath) && V_EQ(pPath->cls, PSYM(pathexpr))) {
             Value curObj = obj;
-            
+
             int nSlots = pPath->size;
-            
+
             for (int i = 0; i < nSlots; i++) {
                 Value pathElt = pPath->pSlots[i];
                 if (V_ISINT(pathElt))
@@ -984,7 +984,7 @@ void    SetPath(Value obj, Value path, Value newValue)
     }
     else {
         Object* pPath = V_PTR(path);
-        
+
         if (ObjIsSymbol(pPath)) {
             SetSlot(obj, path, newValue);
         }
@@ -1031,15 +1031,15 @@ bool    HasPath(Value obj, Value path)
     }
     else {
         Object* pPath = V_PTR(path);
-        
+
         if (ObjIsSymbol(pPath)) {
             return ObjIsFrame(UNSAFE_V_PTR(obj)) && HasSlot(obj, path);
         }
         else if (ObjIsArray(pPath) && V_EQ(pPath->cls, PSYM(pathexpr))) {
             Value curObj = obj;
-            
+
             int nSlots = pPath->size;
-            
+
             for (int i = 0; i < nSlots; i++) {
                 Value pathElt = pPath->pSlots[i];
                 if (V_ISPTR(curObj)) {

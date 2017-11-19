@@ -1,42 +1,42 @@
 output := func () begin
-	local tests := {
-	f1:	func () begin
-			try begin
-				Throw('|evt.ex|, 1234);
-			end
-			onexception |evt.ex| do begin
-				Print("evt.ex");
-			end
-		end,
-		
-	f2:	func () begin
-			try begin
-				try begin
-					Throw('|evt.ex.fr|, 1234);
-				end
-				onexception |evt.ex.bozo| do begin
-					nil;
-				end
-				onexception |evt.ex| do begin
-					Print("evt.ex middle");
-					try begin
-						Print(CurrentException());
-					end
-					onexception |evt.ex| do begin
-						Print("evt.ex inner");
-					end;
-					Throw('|evt.ex.fr|, 2345);
-				end
-			end
-			onexception |evt.ex| do begin
-				Print("evt.ex outer");
-				Print(CurrentException());
-			end;
-			Print(CurrentException());
-		end
-	};
-	
-	tests:f2();
+    local tests := {
+    f1: func () begin
+            try begin
+                Throw('|evt.ex|, 1234);
+            end
+            onexception |evt.ex| do begin
+                Print("evt.ex");
+            end
+        end,
+
+    f2: func () begin
+            try begin
+                try begin
+                    Throw('|evt.ex.fr|, 1234);
+                end
+                onexception |evt.ex.bozo| do begin
+                    nil;
+                end
+                onexception |evt.ex| do begin
+                    Print("evt.ex middle");
+                    try begin
+                        Print(CurrentException());
+                    end
+                    onexception |evt.ex| do begin
+                        Print("evt.ex inner");
+                    end;
+                    Throw('|evt.ex.fr|, 2345);
+                end
+            end
+            onexception |evt.ex| do begin
+                Print("evt.ex outer");
+                Print(CurrentException());
+            end;
+            Print(CurrentException());
+        end
+    };
+
+    tests:f2();
 end;
 
 call output with ();

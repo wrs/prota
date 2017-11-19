@@ -1,62 +1,62 @@
 syms := '[
-	Append,
-	array,
-	bottom,
-	|call|,
-	class,
-	cobj,
-	data,
-	entry,
-	errCode,
-	functions,
-	GetString,
-	iterator,
-	left,
-	numArgs,
-	real,
-	Reset,
-	send,
-	string,
-	pathExpr,
-	printDepth,
-	right,
-	top,
-	vars,
-	_implementor,
-	_nextArgFrame,
-	_proto,
-	_parent
+    Append,
+    array,
+    bottom,
+    |call|,
+    class,
+    cobj,
+    data,
+    entry,
+    errCode,
+    functions,
+    GetString,
+    iterator,
+    left,
+    numArgs,
+    real,
+    Reset,
+    send,
+    string,
+    pathExpr,
+    printDepth,
+    right,
+    top,
+    vars,
+    _implementor,
+    _nextArgFrame,
+    _proto,
+    _parent
 ];
 
 //PREDEF(Binary, PREDEF_SYM_NAME(string)) = { 11, 0, SYMBOL_CLASS, &data_string };
 //char data_string[] = { 3, 0, 0, 0, 's', 't', 'r', 'i', 'n', 'g', 0 };
 
 foreach i, sym in syms do
-	syms[i] := downcase(sym & "");
+    syms[i] := downcase(sym & "");
 
 foreach sym in syms do
-	write("extern char data_" & sym & "[];\n");
+    write("extern char data_" & sym & "[];\n");
 
 foreach sym in syms do
-	write("PREDEF(Binary, PREDEF_SYM_NAME(" & sym &
-		  ")) = { " & strlen(sym) + 5 & ", 0, SYMBOL_CLASS, &data_" & sym & " };\n");
+    write("PREDEF(Binary, PREDEF_SYM_NAME(" & sym &
+          ")) = { " & strlen(sym) + 5 & ", 0, SYMBOL_CLASS, &data_" & sym & " };\n");
 
 foreach sym in syms do begin
-	write("char data_" & sym & "[] = { " & ord(sym[0]) mod 16 & ", 0, 0, 0");
-	for i := 0 to strlen(sym) - 1 do
-		write(", '" & sym[i] & "'");
-	write(", 0 };\n");
+    write("char data_" & sym & "[] = { " & ord(sym[0]) mod 16 & ", 0, 0, 0");
+    for i := 0 to strlen(sym) - 1 do
+        write(", '" & sym[i] & "'");
+    write(", 0 };\n");
 end;
 
-write("void	InitPredefObjects()\n"
-	  "{\n"
-	  "\tstatic Value predefSyms[] = {\n");
+write("void InitPredefObjects()\n"
+      "{\n"
+      "\tstatic Value predefSyms[] = {\n");
 
 foreach sym in syms do begin
-	write("\t\tPSYM(" & sym & "),\n");
+    write("\t\tPSYM(" & sym & "),\n");
 end;
 
 write("\t};\n"
-	  "\n"
-	  "\tInternPredefSyms(predefSyms, ARRAYSIZE(predefSyms));\n"
-	  "}\n");
+      "\n"
+      "\tInternPredefSyms(predefSyms, ARRAYSIZE(predefSyms));\n"
+      "}\n");

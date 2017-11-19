@@ -21,8 +21,6 @@ interpreter test programs, which is why you'll see NTK files here.)
 * A UI system
 * Any other Newton technology :)
 
-There is no object store.
-
 I used the Boehm conservative garbage collection library for memory management
 rather than the error-prone `RefVar` system used for precise GC in the Newton
 OS. There might be a nicer way to do this in C++ now, but I haven't written any

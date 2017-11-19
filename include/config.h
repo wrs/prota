@@ -1,10 +1,10 @@
 /*
-	Proto language runtime
+    Proto language runtime
 
-	Configuration header
+    Configuration header
 
-	Copyright 1997-1999 Walter R. Smith
-	Licensed under the MIT License. See LICENSE file in project root.
+    Copyright 1997-1999 Walter R. Smith
+    Licensed under the MIT License. See LICENSE file in project root.
 */
 
 #ifndef __CONFIG_H__

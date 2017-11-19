@@ -1,10 +1,10 @@
 /*
-	Prota language runtime
+    Prota language runtime
 
-	Object hash table
+    Object hash table
 
-	Copyright 2003 Walter R. Smith
-	Licensed under the MIT License. See LICENSE file in project root.
+    Copyright 2003 Walter R. Smith
+    Licensed under the MIT License. See LICENSE file in project root.
 */
 
 #ifndef __OBJHASH_H__
@@ -21,7 +21,7 @@ public:
     ObjHashTable()
     {
         m_size = 0;
-        
+
         // Start out using a stack buffer--we'll switch to heap if it overflows.
 
         m_table = m_initialTable;
@@ -104,7 +104,7 @@ private:
     {
         int oldCapacity = m_capacity;
         Element* oldTable = m_table;
-        
+
         SetCapacity(m_capacity * 2);
 
         for (int i = 0; i < oldCapacity; i++) {
