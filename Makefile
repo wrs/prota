@@ -9,15 +9,14 @@ SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
-#INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_DIRS := ./include ./gc/include
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CC := cc
 CXX := cc
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -m32 -stdlib=libc++ -std=c++11 -Wno-c++11-compat-deprecated-writable-strings
-LDFLAGS ?= -m32 -stdlib=libc++ -lc++
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -g -m32 -stdlib=libc++ -std=c++11 -Wno-c++11-compat-deprecated-writable-strings
+LDFLAGS ?= -m32 -stdlib=libc++ -lc++ bdwgc/gc.a
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
