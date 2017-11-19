@@ -1,0 +1,74 @@
+//nil; true; 42; 1.5; #1A;
+//2+2; 3-4; 5/6; 7*8; 1+3*4*5+9;
+//1 < 3; 27 + 4 >= 9 and not "foo" = #1234
+/*
+'[array, real, string, _implementor, _nextargframe, _proto, _parent];
+'foo;
+'[fred: 1, true, [zap], [x, x.y, x.y.z]];
+'{a: 1, b: 2, c: [zappo: fnord, {a: 2, b: 4}]};
+*/
+//y.a.b.c := q[0] exists;
+//begin 1; 2; x; y.z; y.('z); y.(z); y.a.b.c end
+/*
+foo();
+foo(1);
+foo(1,2,3);
+call foo with ();
+call foo with (1);
+call foo with (1,2,3);
+call begin y.z := 12; a[14] end with (toast.fred exists, x + 2 * 4);
+foo:bar exists;
+fred(x[0]):bar exists;
+fred(x[0]).bar exists;
+inherited:bar exists;
+foo:bar();
+foo:bar(1);
+foo:bar(1, 2);
+inherited:bar(1, 2);
+:bar(1, 2);
+foo:?bar(1, 2);
+inherited:?bar(1, 2);
+:?bar(1, 2);
+if x = 4 then foo();
+if y = 12 then bar() else baz();
+if z then if y then a else b else c;
+loop foo();
+for x := 1 to 10 do foo();
+for x := 1 to 10 by 2 do foo();
+foreach val in x do foo(val);
+foreach val deeply in x do foo(val);
+foreach ind, val in x do foo(ind, val);
+foreach ind, val deeply in x do foo(ind, val);
+foreach val in x collect foo(val);
+foreach val deeply in x collect foo(val);
+foreach ind, val in x collect foo(ind, val);
+foreach ind, val deeply in x collect foo(ind, val);
+while x < 4 do begin foo(x); x := x + 1; end;
+repeat foo(x); x := x + 1; until x >= 4;
+func () x + 2;
+func (a, int b, c) begin y := a + b + c end;
+try foo() onexception fred do x := 1;
+try foo() onexception fred do x := 1 onexception |evt.ex| do y := 3;
+return;
+return x+2;
+break;
+break x+2;
+[];
+[x:1];
+[x:foo()];
+[1,2];
+[x:1,2];
+{};
+{a:1};
+{a:1,b:2};
+*/
+local x;
+local x := 1;
+local x, y;
+local x, y := 1;
+global x;
+global x := 1;
+global x(y) 12;
+func x(y) 12;
+constant x := 1;
+constant x := 1, y := 2;
