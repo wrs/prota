@@ -1,3 +1,4 @@
+bdwgc/
 build/
 .DS_Store
 *.log
