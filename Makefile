@@ -9,7 +9,7 @@ SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.s)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
-INC_DIRS := ./include ./gc/include
+INC_DIRS := ./include ./bdwgc/include
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CC := cc
