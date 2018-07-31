@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Object system runtime
 
@@ -36,19 +36,19 @@ void    CheckFrame(Value frame);
 
 int     V_INT_error()
 {
-    PROTO_THROW(g_exType, E_NotAnInteger);
+    PROTA_THROW(g_exType, E_NotAnInteger);
     return 0;
 }
 
 int     V_CHAR_error()
 {
-    PROTO_THROW(g_exType, E_NotACharacter);
+    PROTA_THROW(g_exType, E_NotACharacter);
     return 0;
 }
 
 Object* V_PTR_error()
 {
-    PROTO_THROW(g_exType, E_NotAPointer);
+    PROTA_THROW(g_exType, E_NotAPointer);
     return 0;
 }
 
@@ -77,7 +77,7 @@ double  V_REAL(Value v)
 {
     Object* pObj = V_PTR(v);
     if (!V_EQ(pObj->cls, PSYM(real)))
-        PROTO_THROW(g_exType, E_NotAReal);
+        PROTA_THROW(g_exType, E_NotAReal);
     return *(double*)pObj->pData;
 }
 
@@ -174,7 +174,7 @@ Value   NewBinary(Value cls, void* pData, int size)
 Value   NewArray(Value cls, int nSlots)
 {
     if (nSlots < 0 || nSlots > MAX_SLOTS)
-        PROTO_THROW(g_exFr, E_BadArguments);
+        PROTA_THROW(g_exFr, E_BadArguments);
     Object* pObj = GC_NEW(Object);
     pObj->size = nSlots;
     pObj->flags = HDR_SLOTTED;
@@ -206,9 +206,9 @@ Value   GetSlot(Value array, int index)
 {
     Object* pObj = V_PTR(array);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != HDR_SLOTTED)
-        PROTO_THROW(g_exType, E_NotAnArray);
+        PROTA_THROW(g_exType, E_NotAnArray);
     if (index < 0 || index >= (int) pObj->size)
-        PROTO_THROW(g_exFr, E_OutOfBounds);
+        PROTA_THROW(g_exFr, E_OutOfBounds);
     return pObj->pSlots[index];
 }
 
@@ -216,7 +216,7 @@ void*   GetData(Value binary)
 {
     Object* pObj = V_PTR(binary);
     if ((pObj->flags & HDR_SLOTTED))
-        PROTO_THROW(g_exType, E_NotABinary);
+        PROTA_THROW(g_exType, E_NotABinary);
     return pObj->pData;
 }
 
@@ -224,7 +224,7 @@ Value   GetClassSlot(Value obj)
 {
     Object* pObj = V_PTR(obj);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) == (HDR_SLOTTED | HDR_FRAME))
-        PROTO_THROW(g_exType, E_UnexpectedFrame);
+        PROTA_THROW(g_exType, E_UnexpectedFrame);
     return pObj->cls;
 }
 
@@ -232,7 +232,7 @@ void    SetClassSlot(Value obj, Value cls)
 {
     Object* pObj = V_PTR(obj);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) == (HDR_SLOTTED | HDR_FRAME))
-        PROTO_THROW(g_exType, E_UnexpectedFrame);
+        PROTA_THROW(g_exType, E_UnexpectedFrame);
     pObj->cls = cls;
 }
 
@@ -243,9 +243,9 @@ void    SetSlot(Value array, int index, Value newValue)
 {
     Object* pObj = V_PTR(array);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != HDR_SLOTTED)
-        PROTO_THROW(g_exType, E_NotAnArray);
+        PROTA_THROW(g_exType, E_NotAnArray);
     if (index < 0 || index >= (int) pObj->size)
-        PROTO_THROW(g_exFr, E_OutOfBounds);
+        PROTA_THROW(g_exFr, E_OutOfBounds);
     pObj->pSlots[index] = newValue;
 }
 
@@ -255,7 +255,7 @@ void    SetSlot(Value array, int index, Value newValue)
 void    SetSlottedLength(Object* pObj, int nSlots)
 {
     if (nSlots < 0 || nSlots > MAX_SLOTS)
-        PROTO_THROW(g_exFr, E_OutOfBounds);
+        PROTA_THROW(g_exFr, E_OutOfBounds);
 
     int oldSize = pObj->size;
     if (nSlots == oldSize)
@@ -286,7 +286,7 @@ void    SetArrayLength(Value array, int nSlots)
 {
     Object* pObj = V_PTR(array);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != HDR_SLOTTED)
-        PROTO_THROW(g_exType, E_NotAnArray);
+        PROTA_THROW(g_exType, E_NotAnArray);
     SetSlottedLength(pObj, nSlots);
 }
 
@@ -294,7 +294,7 @@ void    AddArraySlot(Value array, Value newValue)
 {
     Object* pObj = V_PTR(array);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != HDR_SLOTTED)
-        PROTO_THROW(g_exType, E_NotAnArray);
+        PROTA_THROW(g_exType, E_NotAnArray);
     AddSlotValue(pObj, newValue);
 }
 
@@ -302,7 +302,7 @@ Value*  GetArraySlots(Value array)
 {
     Object* pObj = V_PTR(array);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != HDR_SLOTTED)
-        PROTO_THROW(g_exType, E_NotAnArray);
+        PROTA_THROW(g_exType, E_NotAnArray);
 
     return pObj->pSlots;
 }
@@ -311,7 +311,7 @@ int     GetArrayLength(Value array)
 {
     Object* pObj = V_PTR(array);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != HDR_SLOTTED)
-        PROTO_THROW(g_exType, E_NotAnArray);
+        PROTA_THROW(g_exType, E_NotAnArray);
 
     return pObj->size;
 }
@@ -320,9 +320,9 @@ void    SetBinaryLength(Value binary, int size)
 {
     Object* pObj = V_PTR(binary);
     if ((pObj->flags & HDR_SLOTTED))
-        PROTO_THROW(g_exType, E_NotABinary);
+        PROTA_THROW(g_exType, E_NotABinary);
     if (size < 0 || size > MAX_DATA)
-        PROTO_THROW(g_exFr, E_OutOfBounds);
+        PROTA_THROW(g_exFr, E_OutOfBounds);
 
     int oldSize = pObj->size;
     if (size == oldSize)
@@ -336,7 +336,7 @@ int     GetBinaryLength(Value binary)
 {
     Object* pObj = V_PTR(binary);
     if ((pObj->flags & HDR_SLOTTED))
-        PROTO_THROW(g_exType, E_NotABinary);
+        PROTA_THROW(g_exType, E_NotABinary);
 
     return pObj->size;
 }
@@ -402,7 +402,7 @@ bool    FindHashMapTag(int tableSize, MapSlots* pMapSlots, Value tag,
 {
     Object* pTag = V_PTR(tag);
     if (!ObjIsSymbol(pTag))
-        PROTO_THROW_ERR(g_exType, E_NotASymbol, tag);
+        PROTA_THROW_ERR(g_exType, E_NotASymbol, tag);
 
     int hash = ((SymbolData*) pTag->pData)->hash;
     int sizeMask = tableSize - 1;
@@ -605,7 +605,7 @@ bool    HasSlot(Value frame, Value tag)
 {
     Object* pObj = V_PTR(frame);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != (HDR_SLOTTED | HDR_FRAME))
-        PROTO_THROW(g_exType, E_NotAFrame);
+        PROTA_THROW(g_exType, E_NotAFrame);
 
     int index = FindOffset(pObj->map, tag);
     return (index >= 0);
@@ -615,7 +615,7 @@ Value   GetSlot(Value frame, Value tag)
 {
     Object* pObj = V_PTR(frame);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != (HDR_SLOTTED | HDR_FRAME))
-        PROTO_THROW(g_exType, E_NotAFrame);
+        PROTA_THROW(g_exType, E_NotAFrame);
     int index = FindOffset(pObj->map, tag);
     if (index < 0)
         return V_NIL;
@@ -694,7 +694,7 @@ void    RemoveSlot(Value frame, Value tag)
 {
     Object* pObj = V_PTR(frame);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != (HDR_SLOTTED | HDR_FRAME))
-        PROTO_THROW(g_exType, E_NotAFrame);
+        PROTA_THROW(g_exType, E_NotAFrame);
 
     RemoveSlotInner(pObj->map, tag, pObj);
 
@@ -803,7 +803,7 @@ void    SetSlot(Value frame, Value tag, Value newValue)
 {
     Object* pObj = V_PTR(frame);
     if ((pObj->flags & (HDR_SLOTTED | HDR_FRAME)) != (HDR_SLOTTED | HDR_FRAME))
-        PROTO_THROW(g_exType, E_NotAFrame);
+        PROTA_THROW(g_exType, E_NotAFrame);
 
     int index = FindOffset(pObj->map, tag);
 
@@ -972,7 +972,7 @@ Value   GetPath(Value obj, Value path)
             return curObj;
         }
         else {
-            PROTO_THROW_ERR(g_exType, E_InvalidPath, path);
+            PROTA_THROW_ERR(g_exType, E_InvalidPath, path);
         }
     }
 }
@@ -994,7 +994,7 @@ void    SetPath(Value obj, Value path, Value newValue)
 
             int nSlots = pPath->size;
             if (nSlots == 0)
-                PROTO_THROW_ERR(g_exType, E_InvalidPath, path);
+                PROTA_THROW_ERR(g_exType, E_InvalidPath, path);
 
             for (int i = 0; i < nSlots - 1; i++) {
                 pathElt = pPath->pSlots[i];
@@ -1011,7 +1011,7 @@ void    SetPath(Value obj, Value path, Value newValue)
                 SetSlot(curObj, pathElt, newValue);
         }
         else {
-            PROTO_THROW_ERR(g_exType, E_InvalidPath, path);
+            PROTA_THROW_ERR(g_exType, E_InvalidPath, path);
         }
     }
 }
@@ -1066,12 +1066,12 @@ bool    HasPath(Value obj, Value path)
             return true;
         }
         else {
-            PROTO_THROW_ERR(g_exType, E_InvalidPath, path);
+            PROTA_THROW_ERR(g_exType, E_InvalidPath, path);
         }
     }
 }
 
-/// Proto exceptions are represented by the ProtaException structure. The details
+/// Prota exceptions are represented by the ProtaException structure. The details
 /// of exceptions are done this way for NewtonScript compatibility, not because it's
 /// a particularly good approach!
 
@@ -1118,9 +1118,9 @@ TCHAR*  GetCString(Value str)
 void    StrAppend(Value str1, Value str2)
 {
     if (!IsString(str1))
-        PROTO_THROW(g_exType, E_NotAString);
+        PROTA_THROW(g_exType, E_NotAString);
     if (!IsString(str2))
-        PROTO_THROW(g_exType, E_NotAString);
+        PROTA_THROW(g_exType, E_NotAString);
 
     int str1Len = GetBinaryLength(str1) / sizeof(wchar_t);
     int str2Len = GetBinaryLength(str2) / sizeof(wchar_t);
@@ -1132,7 +1132,7 @@ void    StrAppend(Value str1, Value str2)
 
 // BUGBUG: On Win32, should just do this in DLLMain
 
-void    InitProtoLib()
+void    InitProtaLib()
 {
     extern void InitPredefObjects(void);
     extern void InitInterpreter(void);

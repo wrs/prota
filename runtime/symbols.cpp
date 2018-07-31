@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Symbol handling
 
@@ -78,7 +78,7 @@ Value   Intern(const char* name)
 const char* SymbolName(Value sym)
 {
     if (GetClassSlot(sym) != SYMBOL_CLASS)
-        PROTO_THROW(g_exType, E_NotASymbol);
+        PROTA_THROW(g_exType, E_NotASymbol);
     SymbolData* pSymData = (SymbolData*) GetData(sym);
     return pSymData->name;
 }

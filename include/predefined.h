@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Definitions for using compile-time objects
 

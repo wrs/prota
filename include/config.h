@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Configuration header
 
