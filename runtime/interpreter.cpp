@@ -512,7 +512,7 @@ void    Process::Interpret()
                 PrintCStack(csp, m_csTop, 6);
                 TRACE("\n");
                 PrintVStack(m_vsp, m_vsTop, 6, 0);
-                TRACE("\n\t%X@%d: ", (int) csp->func, csp->ip - csp->instrStart);
+                TRACE("\n\t%X@%d: ", (int)(size_t) csp->func, csp->ip - csp->instrStart);
                 PrintInstruction(csp->ip, csp->literals);
                 TRACE("\n");
 
@@ -1277,7 +1277,7 @@ void    PrintCStack(StackFrame* csp, StackFrame* csTop, int nItems)
     // in printing it.
 
     for (StackFrame* sfp = limit + 1; sfp <= csp; sfp++)
-        TRACE("%X@%d ", (int) sfp->func, sfp->ip - sfp->instrStart);
+        TRACE("%X@%d ", (int)(size_t) sfp->func, sfp->ip - sfp->instrStart);
 }
 
 #ifdef BCCOUNT
