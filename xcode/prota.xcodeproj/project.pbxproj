@@ -284,9 +284,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BKU5H4GUNQ;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../bdwgc/include";
-				OTHER_CFLAGS = "-m32";
+				OTHER_CFLAGS = "";
 				"OTHER_CFLAGS[arch=*]" = "";
-				OTHER_LDFLAGS = "-m32";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -297,8 +297,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BKU5H4GUNQ;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../bdwgc/include";
-				OTHER_CFLAGS = "-m32";
-				OTHER_LDFLAGS = "-m32";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
