@@ -190,7 +190,7 @@ int main()
     extern void PrintBCCounts(void);
 
     try {
-        InitProtoLib();
+        InitProtaLib();
 
         //TestFrames();
         //testiter();

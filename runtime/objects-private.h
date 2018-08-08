@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Private interface to the object system
 
@@ -52,9 +52,9 @@ inline bool ObjIsSymbol(Object* pObj)
 const int MAX_SLOTS = (1 << 28) - 1;
 const int MAX_DATA = (1 << 28) - 1;
 
-inline Value PTR_V(void* p) { return (Value) (((int) p) | TAG_PTR); }
+inline Value PTR_V(void* p) { return (Value) (((int)(size_t) p) | TAG_PTR); }
 Object* V_PTR(Value v);
-inline Object* UNSAFE_V_PTR(Value v) { return (Object*) (((int) v) - 1); }
+inline Object* UNSAFE_V_PTR(Value v) { return (Object*) (((int)(size_t) v) - 1); }
 
 // Map class flags (for the cls slot of map objects)
 

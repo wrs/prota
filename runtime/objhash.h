@@ -72,7 +72,7 @@ private:
 
     bool    Find(Value key, int* iSlot)
     {
-        int hash = ((UInt32) key * 0x9e3779b9) & m_mask;
+        int hash = ((UInt32)(size_t) key * 0x9e3779b9) & m_mask;
         int incr = ((hash * 13) & m_mask) | 1;
         for (;;) {
             Value k = m_table[hash].key;

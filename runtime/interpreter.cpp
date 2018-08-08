@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Main interpreter loop
 
@@ -174,11 +174,11 @@ Value   NewIterator(Value obj, bool deeply)
     ASSERT(!deeply);
 
     if (!V_ISPTR(obj))
-        PROTO_THROW(g_exType, E_NotAPointer);
+        PROTA_THROW(g_exType, E_NotAPointer);
     Object* pObj = V_PTR(obj);
     int flags = pObj->flags;
     if (!(flags & HDR_SLOTTED))
-        PROTO_THROW(g_exType, E_NotAPointer);
+        PROTA_THROW(g_exType, E_NotAPointer);
 
     Value iter = NewArray(SYM(iterator), sizeof(Iterator) / sizeof(Value));
     Iterator* pIter = (Iterator*) (V_PTR(iter)->pSlots);
@@ -207,11 +207,11 @@ bool    IteratorDone(Value iter)
     Iterator* pIter = (Iterator*) (V_PTR(iter)->pSlots);
 
     if (!V_ISPTR(pIter->curObj))
-        PROTO_THROW(g_exType, E_NotAFrameOrArray);
+        PROTA_THROW(g_exType, E_NotAFrameOrArray);
     Object* pObj = V_PTR(pIter->curObj);
     int flags = pObj->flags;
     if (!(flags & HDR_SLOTTED))
-        PROTO_THROW(g_exType, E_NotAFrameOrArray);
+        PROTA_THROW(g_exType, E_NotAFrameOrArray);
 
     pIter->numSlots = INT_V(pObj->size);
 
@@ -366,12 +366,12 @@ void    Process::SetupCall(Value fn, int actualNumArgs)
 {
     Object* pObj = V_PTR(fn);
     if (!(pObj->flags & HDR_SLOTTED) || pObj->size < 1)
-        PROTO_THROW(g_exType, E_NotAFunction);
+        PROTA_THROW(g_exType, E_NotAFunction);
 
     if (pObj->pSlots[0] == NATIVE_FN_CLASS) {
         NativeFunc* pFn = (NativeFunc*) pObj->pSlots;
         if (UNSAFE_V_INT(pFn->numArgs) != actualNumArgs)
-            PROTO_THROW(g_exIntrp, E_WrongNumArgs);
+            PROTA_THROW(g_exIntrp, E_WrongNumArgs);
         Value* pArgs = m_vsp - actualNumArgs + 1;
         Value result = ((NativeFuncPtr) pFn->fnPtr)(V_NIL, pArgs, this);
         Drop(actualNumArgs);
@@ -385,7 +385,7 @@ void    Process::SetupCall(Value fn, int actualNumArgs)
         numArgs &= 0xFFFF;
 
         if (numArgs != actualNumArgs)
-            PROTO_THROW(g_exIntrp, E_WrongNumArgs);
+            PROTA_THROW(g_exIntrp, E_WrongNumArgs);
 
         PushFrame();
 
@@ -413,7 +413,7 @@ void    Process::SetupCall(Value fn, int actualNumArgs)
         }
     }
     else
-        PROTO_THROW(g_exType, E_NotAFunction);
+        PROTA_THROW(g_exType, E_NotAFunction);
 }
 
 bool    Process::SetupSend(Value rcvr, Value start, Value name, int actualNumArgs, bool resend)
@@ -437,12 +437,12 @@ bool    Process::SetupSend(Value rcvr, Value start, Value name, int actualNumArg
 
     Object* pObj = V_PTR(fn);
     if (!(pObj->flags & HDR_SLOTTED) || pObj->size < 1)
-        PROTO_THROW(g_exType, E_NotAFunction);
+        PROTA_THROW(g_exType, E_NotAFunction);
 
     if (pObj->pSlots[0] == NATIVE_FN_CLASS) {
         NativeFunc* pFn = (NativeFunc*) pObj->pSlots;
         if (UNSAFE_V_INT(pFn->numArgs) != actualNumArgs)
-            PROTO_THROW(g_exIntrp, E_WrongNumArgs);
+            PROTA_THROW(g_exIntrp, E_WrongNumArgs);
         Value* pArgs = m_vsp - actualNumArgs + 1;
         Value result = ((NativeFuncPtr) pFn->fnPtr)(rcvr, pArgs, this);
         Drop(actualNumArgs);
@@ -456,7 +456,7 @@ bool    Process::SetupSend(Value rcvr, Value start, Value name, int actualNumArg
         numArgs &= 0xFFFF;
 
         if (numArgs != actualNumArgs)
-            PROTO_THROW(g_exIntrp, E_WrongNumArgs);
+            PROTA_THROW(g_exIntrp, E_WrongNumArgs);
 
         PushFrame();
 
@@ -486,7 +486,7 @@ bool    Process::SetupSend(Value rcvr, Value start, Value name, int actualNumArg
         }
     }
     else
-        PROTO_THROW(g_exType, E_NotAFunction);
+        PROTA_THROW(g_exType, E_NotAFunction);
 
     return true;
 }
@@ -512,7 +512,7 @@ void    Process::Interpret()
                 PrintCStack(csp, m_csTop, 6);
                 TRACE("\n");
                 PrintVStack(m_vsp, m_vsTop, 6, 0);
-                TRACE("\n\t%X@%d: ", (int) csp->func, csp->ip - csp->instrStart);
+                TRACE("\n\t%X@%d: ", (int)(size_t) csp->func, csp->ip - csp->instrStart);
                 PrintInstruction(csp->ip, csp->literals);
                 TRACE("\n");
 
@@ -618,7 +618,7 @@ void    Process::Interpret()
                     Value name = Pop();
                     Value func = FindGlobalFunction(name);
                     if (func == V_NIL)
-                        PROTO_THROW(g_exIntrp, E_UndefinedFunction);
+                        PROTA_THROW(g_exIntrp, E_UndefinedFunction);
                     SetupCall(func, param);
                     csp = m_csp;
                     break;
@@ -639,7 +639,7 @@ void    Process::Interpret()
                     TRACEVALUE(rcvr, 2);
                     TRACE("\n");
                     if (!SetupSend(rcvr, rcvr, name, param, false))
-                        PROTO_THROW(g_exIntrp, E_UndefinedMethod);
+                        PROTA_THROW(g_exIntrp, E_UndefinedMethod);
                     csp = m_csp;
                     break;
                 }
@@ -659,7 +659,7 @@ void    Process::Interpret()
                 {
                     Value name = Pop();
                     if (!SetupSend(csp->rcvr, GetSlot(csp->impl, PSYM(_proto)), name, param, true))
-                        PROTO_THROW(g_exIntrp, E_UndefinedMethod);
+                        PROTA_THROW(g_exIntrp, E_UndefinedMethod);
                     csp = m_csp;
                     break;
                 }
@@ -700,7 +700,7 @@ void    Process::Interpret()
                     else if (GetGlobalVar(name, &value))
                         Push(value);
                     else
-                        PROTO_THROW(g_exIntrp, E_UndefinedVariable);
+                        PROTA_THROW(g_exIntrp, E_UndefinedVariable);
                     break;
                 }
 
@@ -743,7 +743,7 @@ void    Process::Interpret()
                         if (param == 0)
                             Push(V_NIL);
                         else
-                            PROTO_THROW(g_exFr, E_PathFailed);
+                            PROTA_THROW(g_exFr, E_PathFailed);
                     }
                     else
                         Push(GetPath(obj, path));
@@ -802,7 +802,7 @@ void    Process::Interpret()
                     int index = V_INT(Pop());
                     int incr = V_INT(Pop());
                     if (incr == 0)
-                        PROTO_THROW(g_exIntrp, E_ZeroForLoopIncr);
+                        PROTA_THROW(g_exIntrp, E_ZeroForLoopIncr);
                     else if ((incr > 0 && index <= limit) || (incr < 0 && index >= limit))
                         csp->ip = csp->instrStart + param;
                     break;
@@ -991,7 +991,7 @@ void    Process::Interpret()
                 EIGHTCASE(OP_UNUSED29)
                 EIGHTCASE(OP_UNUSED30)
                 EIGHTCASE(OP_UNUSED31)
-                    PROTO_THROW(g_exIntrp, E_InvalidBytecode);
+                    PROTA_THROW(g_exIntrp, E_InvalidBytecode);
                     break;
 
                 default:
@@ -1277,7 +1277,7 @@ void    PrintCStack(StackFrame* csp, StackFrame* csTop, int nItems)
     // in printing it.
 
     for (StackFrame* sfp = limit + 1; sfp <= csp; sfp++)
-        TRACE("%X@%d ", (int) sfp->func, sfp->ip - sfp->instrStart);
+        TRACE("%X@%d ", (int)(size_t) sfp->func, sfp->ip - sfp->instrStart);
 }
 
 #ifdef BCCOUNT

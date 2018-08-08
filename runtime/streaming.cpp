@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Stream file I/O
 
@@ -75,7 +75,7 @@ int     CPrecedents::Add(Value v)
 Value   CPrecedents::Get(int index)
 {
     if (index < 0 || index >= m_pos)
-        PROTO_THROW(g_exFr, E_BadStreamFormat);
+        PROTA_THROW(g_exFr, E_BadStreamFormat);
     return GetSlot(m_list, index);
 }
 
@@ -110,7 +110,7 @@ Value   CObjectReader::Read()
     Byte version;
     m_in >> version;
     if (version != 1 && version != 2)
-        PROTO_THROW(g_exFr, E_BadStreamFormat);
+        PROTA_THROW(g_exFr, E_BadStreamFormat);
 
     return ReadOne();
 }
@@ -127,7 +127,7 @@ Value   CObjectReader::ReadOne()
     m_in >> op;
 
     if (m_in.eof())
-        PROTO_THROW(g_exFr, E_BadStreamFormat);
+        PROTA_THROW(g_exFr, E_BadStreamFormat);
 
     switch (op) {
     case T_IMMED:
@@ -196,7 +196,7 @@ Value   CObjectReader::ReadOne()
             char name[256];
             i = ReadXLong();
             if (i > ARRAYSIZE(name) - 2)
-                PROTO_THROW(g_exFr, E_BadStreamFormat);
+                PROTA_THROW(g_exFr, E_BadStreamFormat);
             m_in.read(name, i);
             name[i] = '\0';
             v = Intern(name);
@@ -236,10 +236,10 @@ Value   CObjectReader::ReadOne()
         return v;
 
     case T_LARGEBINARY:
-        PROTO_THROW(g_exFr, E_BadStreamFormat);
+        PROTA_THROW(g_exFr, E_BadStreamFormat);
 
     default:
-        PROTO_THROW(g_exFr, E_BadStreamFormat);
+        PROTA_THROW(g_exFr, E_BadStreamFormat);
     }
 }
 
@@ -269,7 +269,7 @@ Value   ReadStreamFile(const char* filename)
     ifstream stream(filename, ios::binary);
     stream.unsetf(ios::skipws); // why does this get set ??
     if (stream.fail())
-        PROTO_THROW(g_exFr, E_BadStreamFormat);
+        PROTA_THROW(g_exFr, E_BadStreamFormat);
     CObjectReader reader(stream);
     return reader.Read();
 }

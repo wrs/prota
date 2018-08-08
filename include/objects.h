@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Object system interfaces
 
@@ -13,7 +13,7 @@
 /** @file */
 
 #include "config.h"
-#include "proto-errors.h"
+#include "prota-errors.h"
 
 /// Fake struct for Value typechecking.
 /// This is just fakery so the compiler will do @c int vs. @c Value
@@ -50,7 +50,7 @@ const Value V_NIL = IMMED_V(IMMED_SPECIAL, 0);  // a.k.a. 2
 
 const Value V_TRUE = IMMED_V(IMMED_BOOLEAN, 1); // a.k.a. 0x1A
 
-inline int      V_TAG(Value v)      { return ((int) v) & TAG_MASK; }
+inline int      V_TAG(Value v)      { return ((int)(size_t) v) & TAG_MASK; }
 
 /// @defgroup preds Type predicates
 /// Tests for Value types.
@@ -66,7 +66,7 @@ inline bool     V_ISPTR(Value v)    { return (V_TAG(v) & TAG_PTR); }
 
 /// Is the Value a character?
 
-inline bool     V_ISCHAR(Value v)   { return (((int) v) & (TAG_MASK | IMMED_MASK)) == (TAG_IMMED | IMMED_CHAR); }
+inline bool     V_ISCHAR(Value v)   { return (((int)(size_t) v) & (TAG_MASK | IMMED_MASK)) == (TAG_IMMED | IMMED_CHAR); }
 
 /// Is the Value a reference to a Binary object?
 
@@ -127,15 +127,15 @@ EXPORT int V_CHAR_error(void);
 /// first -- use only if you're sure the Value is an int (or it doesn't much
 /// matter if it isn't).
 
-inline int      UNSAFE_V_INT(Value v)   { return (((int) v) >> 2); }
+inline int      UNSAFE_V_INT(Value v)   { return (((int)(size_t) v) >> 2); }
 
 /// Converts a Value to an int. Throws if Value is not an integer.
 
-inline int      V_INT(Value v)          { return V_ISINT(v) ? (((int) v) >> 2) : V_INT_error(); }
+inline int      V_INT(Value v)          { return V_ISINT(v) ? (((int)(size_t) v) >> 2) : V_INT_error(); }
 
 /// Converts a Value to a Unicode character. Throws if Value is not a character.
 
-inline int      V_CHAR(Value v)         { return V_ISCHAR(v) ? (((int) v) >> 4) : V_INT_error(); }
+inline int      V_CHAR(Value v)         { return V_ISCHAR(v) ? (((int)(size_t) v) >> 4) : V_INT_error(); }
 
 /// Converts a Value to a bool. Result is false if Value is V_NIL, otherwise true.
 
@@ -168,11 +168,11 @@ struct ProtaException {
         : name(theName), data(INT_V(err))   { }
 };
 
-/// Handy macro to throw a Proto exception. Use whenever possible, in case
+/// Handy macro to throw a Prota exception. Use whenever possible, in case
 /// the exception system changes someday.
 
-#define PROTO_THROW(name, err) throw ProtaException((name), (err))
-#define PROTO_THROW_ERR(name, err, data) throw ProtaException((name), (err), (data))
+#define PROTA_THROW(name, err) throw ProtaException((name), (err))
+#define PROTA_THROW_ERR(name, err, data) throw ProtaException((name), (err), (data))
 
 /// Is name1 a subexception of name2?
 
@@ -192,7 +192,7 @@ const char* const   g_exCompiler = "evt.ex.fr.compiler";    ///< Compiler errors
 
 /// Call once at the beginning of time to initialize the object system.
 
-EXPORT  void    InitProtoLib(void);
+EXPORT  void    InitProtaLib(void);
 
 /// Are Values a and b equal? Tests values of immediates, reals and symbols,
 /// otherwise tests reference (pointer) equality.

@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Configuration header
 
@@ -10,8 +10,10 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-typedef int Int32;
-typedef unsigned int UInt32;
+#include <stdlib.h>
+
+typedef int32_t Int32;
+typedef uint32_t UInt32;
 
 typedef unsigned int UInt;
 typedef unsigned char Byte;

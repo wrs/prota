@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Error codes
 
@@ -7,8 +7,8 @@
     Licensed under the MIT License. See LICENSE file in project root.
 */
 
-#ifndef __PROTO_ERRORS_H__
-#define __PROTO_ERRORS_H__
+#ifndef __PROTA_ERRORS_H__
+#define __PROTA_ERRORS_H__
 
 // evt.ex.fr
 
@@ -78,4 +78,4 @@
 // evt.ex.fr.compiler
 #define E_SyntaxError -49000 // Syntax error
 
-#endif //__PROTO_ERRORS_H__
+#endif //__PROTA_ERRORS_H__

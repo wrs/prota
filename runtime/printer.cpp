@@ -1,5 +1,5 @@
 /*
-    Proto language runtime
+    Prota language runtime
 
     Printer
 
@@ -99,11 +99,11 @@ void    Printer::PrintOneValue(Value v)
             // Don't get into cycles
             if (m_hash.HasKey(v)) {
                 if (ObjIsBinary(pObj))
-                    (*m_printFn)("<#%X>", (int) v);
+                    (*m_printFn)("<#%X>", (int)(size_t) v);
                 else if (ObjIsArray(pObj))
-                    (*m_printFn)("[#%X]", (int) v);
+                    (*m_printFn)("[#%X]", (int)(size_t) v);
                 else if (ObjIsFrame(pObj))
-                    (*m_printFn)("{#%X}", (int) v);
+                    (*m_printFn)("{#%X}", (int)(size_t) v);
             }
             else {
                 // BUGBUG: Shouldn't do strings either
@@ -121,7 +121,7 @@ void    Printer::PrintOneValue(Value v)
                         if (m_depth <= m_maxDepth)
                             PrintFrameSlots(pObj->pSlots, pObj->map);
                         else
-                            (*m_printFn)("%X", (int) v);
+                            (*m_printFn)("%X", (int)(size_t) v);
                         (*m_printFn)("}");
                     }
                     else if (V_EQ(pObj->cls, PSYM(pathexpr))) {
@@ -147,7 +147,7 @@ void    Printer::PrintOneValue(Value v)
                             }
                         }
                         else
-                            (*m_printFn)("%X", (int) v);
+                            (*m_printFn)("%X", (int)(size_t) v);
                         (*m_printFn)("]");
                     }
                 }
@@ -190,11 +190,11 @@ void    Printer::PrintOneValue(Value v)
         else if (V_ISCHAR(v))
             (*m_printFn)("$%c", V_CHAR(v));
         else
-            (*m_printFn)("#%X", (int) v);
+            (*m_printFn)("#%X", (int)(size_t) v);
         break;
 
     case TAG_MAGICPTR:
-        (*m_printFn)("#%X", (int) v);
+        (*m_printFn)("#%X", (int)(size_t) v);
         break;
     }
 
